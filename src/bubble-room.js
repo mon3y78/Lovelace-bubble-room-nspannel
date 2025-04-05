@@ -284,8 +284,8 @@ class BubbleRoom extends LitElement {
       *, *::before, *::after { box-sizing: border-box; }
       :host {
         display: block;
-        --card-height: 190px;
-        --card-background: black;
+        --card-height: 480px;
+        --card-width: 480px;
         --bubble-bg: gray;
         font-family: sans-serif;
       }
@@ -294,6 +294,7 @@ class BubbleRoom extends LitElement {
         margin: 0;
         padding: 0 !important;
         background: transparent !important;
+        width: var(--card-width);
         height: var(--card-height);
       }
       .card {
@@ -322,7 +323,7 @@ class BubbleRoom extends LitElement {
         padding-left: 2px;
         margin-top: -67px;
         margin-left: 0;
-        font-size: 30px;
+        font-size: 36px;
         font-weight: bold;
         color: inherit;
       }
@@ -337,8 +338,8 @@ class BubbleRoom extends LitElement {
         position: absolute;
         cursor: pointer;
         border-radius: 100% !important;
-        width: 170px !important;
-        height: 170px !important;
+        width: 200px !important;
+        height: 200px !important;
         display: flex;
         justify-content: center;
         align-items: center;
