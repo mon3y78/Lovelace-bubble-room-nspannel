@@ -3,9 +3,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import { terser } from "rollup-plugin-terser";
 
 export default {
-  input: 'src/bubble-room.js',
+  input: 'src/bubble-room-nspannel.js',
   output: {
-    file: 'lovelace-bubble-room.js',        // Genera il file bundle nella cartella "dist"
+    file: 'lovelace-bubble-room-nspannel.js',        // Genera il file bundle nella cartella "dist"
     format: 'esm',
     inlineDynamicImports: true
   },

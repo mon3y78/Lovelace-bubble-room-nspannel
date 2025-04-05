@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from 'lit';
 import fitty from 'fitty';
 
-class BubbleRoom extends LitElement {
+class bubbleroomnspannel extends LitElement {
   static get properties() {
     return {
       config: { type: Object },
@@ -21,8 +21,8 @@ class BubbleRoom extends LitElement {
 
   // Supporto all'editor visivo
   static async getConfigElement() {
-    await import('./bubble-room-editor.js');
-    return document.createElement('bubble-room-editor');
+    await import('./bubble-room-nspannel-editor.js');
+    return document.createElement('bubble-room-nspannel-editor');
   }
 
   static getStubConfig() {
@@ -719,13 +719,13 @@ class BubbleRoom extends LitElement {
   }
 }
 
-customElements.define('bubble-room', BubbleRoom);
+customElements.define('bubble-room-nspannel', bubbleroomnspannel);
 // AGGIUNGI QUESTO BLOCCO ALLA FINE DEL FILE
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: 'bubble-room',     // Deve corrispondere a `type: custom:bubble-room`
-  name: 'Bubble Room',            // Nome che vuoi compaia nel picker
-  description: 'Bubble Room',  
+  type: 'bubble-room-nspannel',     // Deve corrispondere a `type: custom:bubble-room-nspannel`
+  name: 'bubble room nspannel nspannel',            // Nome che vuoi compaia nel picker
+  description: 'bubble room nspannel nspannel',  
   preview: true,            // Abilita l'anteprima (se supportata)
-  documentationURL: 'https://github.com/mon3y78/Lovelace-Bubble-room'
+  documentationURL: 'https://github.com/mon3y78/Lovelace-bubble-room-nspannel'
 });
