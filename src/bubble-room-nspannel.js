@@ -345,7 +345,7 @@ class bubbleroomnspannel extends LitElement {
         justify-content: center;
         align-items: center;
         top: 0px;
-        left: -50px;
+        left: 50px;
       }
       .bubble-icon {
         position: absolute;
@@ -411,7 +411,7 @@ class bubbleroomnspannel extends LitElement {
       case 3: return "bottom: 39px; left: 96px;";
       case 4: return "bottom: -1px; left: 85px;";
       case 5: return "bottom: -2px; left: -2px;";
-      case 6: return "top: -140px; left: 5px;";
+      case 6: return "top: -440px; left: 5px;";
       case 7: return "top: -95px; right: 0px;";
       default: return "";
     }
