@@ -345,14 +345,14 @@ class bubbleroomnspannel extends LitElement {
         justify-content: center;
         align-items: center;
         top: -130px;
-        left: -130px;
+        left: -160px;
       }
       .bubble-icon {
         position: absolute;
         top: 10%;
         left: 30%;
         width: 50% !important;
-        --mdc-icon-size: 300px !important;
+        --mdc-icon-size: 270px !important;
         opacity: 0.5 !important;
       }
       .bubble-sub-button-container {
