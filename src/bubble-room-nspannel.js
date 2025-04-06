@@ -294,8 +294,8 @@ class bubbleroomnspannel extends LitElement {
         margin: 0;
         padding: 0 !important;
         background: transparent !important;
-        width: var(--card-width);
-        height: var(--card-height);
+        width: 100%;
+        height: 100%;
       }
       .card {
         position: relative;
