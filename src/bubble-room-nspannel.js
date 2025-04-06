@@ -626,94 +626,89 @@ class bubbleroomnspannel extends LitElement {
       <ha-card>
         <div class="card">
           <div class="grid-container">
-            <!-- tutto il contenuto come prima -->
-          </div>
-        </div>
-      </ha-card>
-      <div class="card">
-        <div class="grid-container">
-          <div class="name-area" style="color: ${nameColor};">
-            ${name}
-          </div>
-          <div class="icon-area">
-            <div class="bubble-icon-container"
-                 style="background-color: ${bubbleBg};"
-                 @pointerdown="${(e) => this._startHold(e, this.config)}"
-                 @pointerup="${(e) => this._endHold(e, this.config, () => this._handleMainIconTap())}"
-                 @pointerleave="${(e) => this._cancelHold(e)}">
-              ${mainIcon ? html`
-                <ha-icon
-                  key="${mainEntityId}-${mainIcon}"
-                  class="bubble-icon"
-                  icon="${mainIcon}"
-                  style="color: ${bubbleIconColor};">
-                </ha-icon>
-              ` : nothing}
+            <div class="name-area" style="color: ${nameColor};">
+              ${name}
             </div>
-            <div class="mushroom-container">
-              ${mushroomTemplates.map((item, index) => {
-                if (!item) return html``;
-                if (item.temperature_sensor && item.humidity_sensor) {
-                  const tempState = hass.states[item.temperature_sensor]?.state || 'N/A';
-                  const humState = hass.states[item.humidity_sensor]?.state || 'N/A';
-                  return html`
-                    <div class="mushroom-item"
-                         style="${item.style ? item.style : this._defaultMushroomStyle(index)}"
-                         @pointerdown="${(e) => this._startHold(e, item)}"
-                         @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
-                         @pointerleave="${(e) => this._cancelHold(e)}">
-                      <div class="mushroom-primary fit-text">🌡️${tempState}°C 💦${humState}%</div>
-                    </div>
-                  `;
-                } else {
-                  const state = hass.states[item.entity]?.state || 'off';
-                  const iconColor = state === 'on'
-                    ? (item.icon_color && item.icon_color.on ? item.icon_color.on : 'orange')
-                    : (item.icon_color && item.icon_color.off ? item.icon_color.off : '#80808055');
-                  const fallbackIcon = this._getFallbackIcon(item.entity);
-                  const iconToUse = (item.icon && item.icon.trim() !== "") ? item.icon : fallbackIcon;
-                  const style = item.style ? item.style : this._defaultMushroomStyle(index);
-                  return html`
-                    <div class="mushroom-item"
-                         style="${style}"
-                         @pointerdown="${(e) => this._startHold(e, item)}"
-                         @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
-                         @pointerleave="${(e) => this._cancelHold(e)}">
-                      ${iconToUse ? html`
-                        <ha-icon icon="${iconToUse}" style="color: ${iconColor};"></ha-icon>
-                      ` : nothing}
-                    </div>
-                  `;
-                }
+            <div class="icon-area">
+              <div class="bubble-icon-container"
+                  style="background-color: ${bubbleBg};"
+                  @pointerdown="${(e) => this._startHold(e, this.config)}"
+                  @pointerup="${(e) => this._endHold(e, this.config, () => this._handleMainIconTap())}"
+                  @pointerleave="${(e) => this._cancelHold(e)}">
+                ${mainIcon ? html`
+                  <ha-icon
+                    key="${mainEntityId}-${mainIcon}"
+                    class="bubble-icon"
+                    icon="${mainIcon}"
+                    style="color: ${bubbleIconColor};">
+                  </ha-icon>
+                ` : nothing}
+              </div>
+              <div class="mushroom-container">
+                ${mushroomTemplates.map((item, index) => {
+                  if (!item) return html``;
+                  if (item.temperature_sensor && item.humidity_sensor) {
+                    const tempState = hass.states[item.temperature_sensor]?.state || 'N/A';
+                    const humState = hass.states[item.humidity_sensor]?.state || 'N/A';
+                    return html`
+                      <div class="mushroom-item"
+                          style="${item.style ? item.style : this._defaultMushroomStyle(index)}"
+                          @pointerdown="${(e) => this._startHold(e, item)}"
+                          @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
+                          @pointerleave="${(e) => this._cancelHold(e)}">
+                        <div class="mushroom-primary fit-text">🌡️${tempState}°C 💦${humState}%</div>
+                      </div>
+                    `;
+                  } else {
+                    const state = hass.states[item.entity]?.state || 'off';
+                    const iconColor = state === 'on'
+                      ? (item.icon_color && item.icon_color.on ? item.icon_color.on : 'orange')
+                      : (item.icon_color && item.icon_color.off ? item.icon_color.off : '#80808055');
+                    const fallbackIcon = this._getFallbackIcon(item.entity);
+                    const iconToUse = (item.icon && item.icon.trim() !== "") ? item.icon : fallbackIcon;
+                    const style = item.style ? item.style : this._defaultMushroomStyle(index);
+                    return html`
+                      <div class="mushroom-item"
+                          style="${style}"
+                          @pointerdown="${(e) => this._startHold(e, item)}"
+                          @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
+                          @pointerleave="${(e) => this._cancelHold(e)}">
+                        ${iconToUse ? html`
+                          <ha-icon icon="${iconToUse}" style="color: ${iconColor};"></ha-icon>
+                        ` : nothing}
+                      </div>
+                    `;
+                  }
+                })}
+              </div>
+            </div>
+            <div class="bubble-sub-button-container">
+              ${subButtons.map(btn => {
+                if (!btn) return html``;
+                const state = hass.states[btn.entity]?.state || 'off';
+                const btnColor = state === 'on' ? colors.active : colors.inactive;
+                const fallbackIcon = this._getFallbackIcon(btn.entity);
+                const iconToUse = btn.icon ? btn.icon : fallbackIcon;
+                // Calcola l'iconColor come nelle mushroom template:
+                const iconColor = state === 'on'
+                  ? (btn.icon_color && btn.icon_color.on ? btn.icon_color.on : 'orange')
+                  : (btn.icon_color && btn.icon_color.off ? btn.icon_color.off : '#80808055');
+                return html`
+                  <div class="bubble-sub-button"
+                      style="background-color: ${btnColor};"
+                      @pointerdown="${(e) => this._startHold(e, btn)}"
+                      @pointerup="${(e) => this._endHold(e, btn, () => this._handleSubButtonTap(btn))}"
+                      @pointerleave="${(e) => this._cancelHold(e)}">
+                    ${iconToUse ? html`
+                      <ha-icon icon="${iconToUse}" style="color: ${iconColor};"></ha-icon>
+                    ` : nothing}
+                  </div>
+                `;
               })}
             </div>
           </div>
-          <div class="bubble-sub-button-container">
-            ${subButtons.map(btn => {
-              if (!btn) return html``;
-              const state = hass.states[btn.entity]?.state || 'off';
-              const btnColor = state === 'on' ? colors.active : colors.inactive;
-              const fallbackIcon = this._getFallbackIcon(btn.entity);
-              const iconToUse = btn.icon ? btn.icon : fallbackIcon;
-              // Calcola l'iconColor come nelle mushroom template:
-              const iconColor = state === 'on'
-                ? (btn.icon_color && btn.icon_color.on ? btn.icon_color.on : 'orange')
-                : (btn.icon_color && btn.icon_color.off ? btn.icon_color.off : '#80808055');
-              return html`
-                <div class="bubble-sub-button"
-                    style="background-color: ${btnColor};"
-                    @pointerdown="${(e) => this._startHold(e, btn)}"
-                    @pointerup="${(e) => this._endHold(e, btn, () => this._handleSubButtonTap(btn))}"
-                    @pointerleave="${(e) => this._cancelHold(e)}">
-                  ${iconToUse ? html`
-                    <ha-icon icon="${iconToUse}" style="color: ${iconColor};"></ha-icon>
-                  ` : nothing}
-                </div>
-              `;
-            })}
-          </div>
         </div>
-      </div>
+      </ha-card>
     `;
   }
 

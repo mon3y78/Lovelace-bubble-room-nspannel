@@ -144,67 +144,62 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
       <ha-card>
         <div class="card">
           <div class="grid-container">
-            <!-- tutto il contenuto come prima -->
+            <div class="name-area" style="color: ${h};">
+              ${i}
+            </div>
+            <div class="icon-area">
+              <div class="bubble-icon-container"
+                  style="background-color: ${a};"
+                  @pointerdown="${t=>this._startHold(t,this.config)}"
+                  @pointerup="${t=>this._endHold(t,this.config,(()=>this._handleMainIconTap()))}"
+                  @pointerleave="${t=>this._cancelHold(t)}">
+                ${c?F`
+                  <ha-icon
+                    key="${r}-${c}"
+                    class="bubble-icon"
+                    icon="${c}"
+                    style="color: ${l};">
+                  </ha-icon>
+                `:B}
+              </div>
+              <div class="mushroom-container">
+                ${u.map(((t,e)=>{if(!t)return F``;if(t.temperature_sensor&&t.humidity_sensor){const i=o.states[t.temperature_sensor]?.state||"N/A",n=o.states[t.humidity_sensor]?.state||"N/A";return F`
+                      <div class="mushroom-item"
+                          style="${t.style?t.style:this._defaultMushroomStyle(e)}"
+                          @pointerdown="${e=>this._startHold(e,t)}"
+                          @pointerup="${e=>this._endHold(e,t,(()=>this._handleMushroomTap(t)))}"
+                          @pointerleave="${t=>this._cancelHold(t)}">
+                        <div class="mushroom-primary fit-text">🌡️${i}°C 💦${n}%</div>
+                      </div>
+                    `}{const i="on"===(o.states[t.entity]?.state||"off")?t.icon_color&&t.icon_color.on?t.icon_color.on:"orange":t.icon_color&&t.icon_color.off?t.icon_color.off:"#80808055",n=this._getFallbackIcon(t.entity),s=t.icon&&""!==t.icon.trim()?t.icon:n,a=t.style?t.style:this._defaultMushroomStyle(e);return F`
+                      <div class="mushroom-item"
+                          style="${a}"
+                          @pointerdown="${e=>this._startHold(e,t)}"
+                          @pointerup="${e=>this._endHold(e,t,(()=>this._handleMushroomTap(t)))}"
+                          @pointerleave="${t=>this._cancelHold(t)}">
+                        ${s?F`
+                          <ha-icon icon="${s}" style="color: ${i};"></ha-icon>
+                        `:B}
+                      </div>
+                    `}}))}
+              </div>
+            </div>
+            <div class="bubble-sub-button-container">
+              ${d.map((t=>{if(!t)return F``;const i=o.states[t.entity]?.state||"off",n="on"===i?e.active:e.inactive,s=this._getFallbackIcon(t.entity),a=t.icon?t.icon:s,r="on"===i?t.icon_color&&t.icon_color.on?t.icon_color.on:"orange":t.icon_color&&t.icon_color.off?t.icon_color.off:"#80808055";return F`
+                  <div class="bubble-sub-button"
+                      style="background-color: ${n};"
+                      @pointerdown="${e=>this._startHold(e,t)}"
+                      @pointerup="${e=>this._endHold(e,t,(()=>this._handleSubButtonTap(t)))}"
+                      @pointerleave="${t=>this._cancelHold(t)}">
+                    ${a?F`
+                      <ha-icon icon="${a}" style="color: ${r};"></ha-icon>
+                    `:B}
+                  </div>
+                `}))}
+            </div>
           </div>
         </div>
       </ha-card>
-      <div class="card">
-        <div class="grid-container">
-          <div class="name-area" style="color: ${h};">
-            ${i}
-          </div>
-          <div class="icon-area">
-            <div class="bubble-icon-container"
-                 style="background-color: ${a};"
-                 @pointerdown="${t=>this._startHold(t,this.config)}"
-                 @pointerup="${t=>this._endHold(t,this.config,(()=>this._handleMainIconTap()))}"
-                 @pointerleave="${t=>this._cancelHold(t)}">
-              ${c?F`
-                <ha-icon
-                  key="${r}-${c}"
-                  class="bubble-icon"
-                  icon="${c}"
-                  style="color: ${l};">
-                </ha-icon>
-              `:B}
-            </div>
-            <div class="mushroom-container">
-              ${u.map(((t,e)=>{if(!t)return F``;if(t.temperature_sensor&&t.humidity_sensor){const i=o.states[t.temperature_sensor]?.state||"N/A",n=o.states[t.humidity_sensor]?.state||"N/A";return F`
-                    <div class="mushroom-item"
-                         style="${t.style?t.style:this._defaultMushroomStyle(e)}"
-                         @pointerdown="${e=>this._startHold(e,t)}"
-                         @pointerup="${e=>this._endHold(e,t,(()=>this._handleMushroomTap(t)))}"
-                         @pointerleave="${t=>this._cancelHold(t)}">
-                      <div class="mushroom-primary fit-text">🌡️${i}°C 💦${n}%</div>
-                    </div>
-                  `}{const i="on"===(o.states[t.entity]?.state||"off")?t.icon_color&&t.icon_color.on?t.icon_color.on:"orange":t.icon_color&&t.icon_color.off?t.icon_color.off:"#80808055",n=this._getFallbackIcon(t.entity),s=t.icon&&""!==t.icon.trim()?t.icon:n,a=t.style?t.style:this._defaultMushroomStyle(e);return F`
-                    <div class="mushroom-item"
-                         style="${a}"
-                         @pointerdown="${e=>this._startHold(e,t)}"
-                         @pointerup="${e=>this._endHold(e,t,(()=>this._handleMushroomTap(t)))}"
-                         @pointerleave="${t=>this._cancelHold(t)}">
-                      ${s?F`
-                        <ha-icon icon="${s}" style="color: ${i};"></ha-icon>
-                      `:B}
-                    </div>
-                  `}}))}
-            </div>
-          </div>
-          <div class="bubble-sub-button-container">
-            ${d.map((t=>{if(!t)return F``;const i=o.states[t.entity]?.state||"off",n="on"===i?e.active:e.inactive,s=this._getFallbackIcon(t.entity),a=t.icon?t.icon:s,r="on"===i?t.icon_color&&t.icon_color.on?t.icon_color.on:"orange":t.icon_color&&t.icon_color.off?t.icon_color.off:"#80808055";return F`
-                <div class="bubble-sub-button"
-                    style="background-color: ${n};"
-                    @pointerdown="${e=>this._startHold(e,t)}"
-                    @pointerup="${e=>this._endHold(e,t,(()=>this._handleSubButtonTap(t)))}"
-                    @pointerleave="${t=>this._cancelHold(t)}">
-                  ${a?F`
-                    <ha-icon icon="${a}" style="color: ${r};"></ha-icon>
-                  `:B}
-                </div>
-              `}))}
-          </div>
-        </div>
-      </div>
     `}set hass(t){this._hass=t,this.requestUpdate()}get hass(){return this._hass}}),window.customCards=window.customCards||[],window.customCards.push({type:"bubble-room-nspannel",name:"bubble room nspannel nspannel",description:"bubble room nspannel nspannel",preview:!0,documentationURL:"https://github.com/mon3y78/Lovelace-bubble-room-nspannel"});customElements.define("bubble-room-nspannel-editor",class extends ot{static get properties(){return{_config:{type:Object},hass:{type:Object},_iconList:{type:Array}}}static async getConfigElement(){return await Promise.resolve().then((function(){return rt})),document.createElement("bubble-room-nspannel-editor")}static getStubConfig(){return{entities:{presence:{entity:"binary_sensor.aqara_fp1_presence"},"sub-button1":{entity:"light.luce_ventola",icon:"mdi:lightbulb",tap_action:{action:"toggle"},hold_action:{action:"more-info"}},"sub-button2":{entity:"fan.sonoff_1000f6e5c7",icon:"mdi:fan",tap_action:{action:"toggle"},hold_action:{action:"more-info"}},"sub-button3":{entity:"media_player.google_nest_1",icon:"mdi:speaker",tap_action:{action:"toggle"},hold_action:{action:"more-info"}},"sub-button4":{entity:"vacuum.slider",icon:"mdi:robot-vacuum",tap_action:{action:"toggle"},hold_action:{action:"more-info"}},climate:{entity:"climate.termostato_salotto",icon:"mdi:thermostat",tap_action:{action:"more-info"}},entities1:{entity:"sensor.some_sensor1",icon:"mdi:information-outline"},entities2:{entity:"sensor.some_sensor2",icon:"mdi:information-outline"},entities3:{entity:"sensor.some_sensor3",icon:"mdi:information-outline"},entities4:{entity:"sensor.some_sensor4",icon:"mdi:information-outline"},entities5:{entity:"sensor.some_sensor5",icon:"mdi:information-outline"},temperature:{temperature_sensor:"sensor.vindstyrka_salotto_temperature",humidity_sensor:"sensor.vindstyrka_salotto_humidity",tap_action:{action:"more-info"}}},colors:{active:"rgba(var(--color-green), 1)",inactive:"rgba(var(--color-green), 0.3)",backgroundActive:"rgba(var(--color-green), 0.4)",backgroundInactive:"rgba(var(--color-green), 0.1)"},name:"Salotto",icon:"mdi:sofa",tap_action:{action:"navigate",navigation_path:"/lovelace/sala"},hold_action:{action:"more-info",navigation_path:""}}}constructor(){super(),this._iconList=["mdi:lightbulb","mdi:fan","mdi:play-circle","mdi:robot-vacuum","mdi:information-outline","mdi:sofa","mdi:account","mdi:bed","mdi:home","mdi:weather-sunny","mdi:weather-cloudy","mdi:weather-rainy"]}connectedCallback(){super.connectedCallback()}setConfig(t){t||(t={}),t.entities||(t.entities={}),t.colors||(t.colors={active:"rgba(var(--color-green), 1)",inactive:"rgba(var(--color-green), 0.3)",backgroundActive:"rgba(var(--color-green), 0.4)",backgroundInactive:"rgba(var(--color-green), 0.1)"}),t.hold_action||(t.hold_action={action:"more-info",navigation_path:""}),this._config=t}getConfig(){const t=JSON.parse(JSON.stringify(this._config)),e={};return Object.keys(t.entities).forEach((i=>{const n=t.entities[i];n.entity&&""!==n.entity.trim()&&(e[i]=n)})),t.entities=e,this._config=t,t}_defaultIconList(){return this._iconList}static get styles(){return s`
       :host {
         display: block;
