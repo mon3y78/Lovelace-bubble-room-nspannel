@@ -36,6 +36,7 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         background: transparent !important;
         width: 100%;
         height: 100%;
+        border: 2px solid red; 
       }
       .card {
         position: relative;
