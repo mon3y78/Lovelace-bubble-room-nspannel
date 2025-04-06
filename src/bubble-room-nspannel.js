@@ -349,8 +349,8 @@ class bubbleroomnspannel extends LitElement {
       }
       .bubble-icon {
         position: absolute;
-        top: 25%;
-        left: -5%;
+        top: 0px;
+        left: 0px;
         width: 50% !important;
         --mdc-icon-size: 270px !important;
         opacity: 0.5 !important;
