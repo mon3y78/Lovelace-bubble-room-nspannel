@@ -62,9 +62,9 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         display: flex;
         align-items: center;
         padding-left: 2px;
-        margin-top: -2px;
+        margin-top: -20px;
         margin-left: 0;
-        font-size: 50px;
+        font-size: 60px;
         font-weight: bold;
         color: inherit;
       }
@@ -79,13 +79,13 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         position: absolute;
         cursor: pointer;
         border-radius: 100% !important;
-        width: 300px !important;
-        height: 300px !important;
+        width: 400px !important;
+        height: 400px !important;
         display: flex;
         justify-content: center;
         align-items: center;
         top: 0px;
-        left: 0px;
+        left: -50px;
       }
       .bubble-icon {
         position: absolute;
@@ -112,7 +112,7 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         padding: 10px;
         border-radius: 10px;
         text-align: center;
-        min-height: 50px;
+        min-height: 110px;
         margin: 3px;
         cursor: pointer;
       }
@@ -132,9 +132,9 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         cursor: pointer;
       }
       .mushroom-item ha-icon {
-        --mdc-icon-size: 33px;
-        width: 33px;
-        height: 33px;
+        --mdc-icon-size: 50px;
+        width: 50px;
+        height: 50px;
       }
       .fit-text {
         white-space: nowrap;
