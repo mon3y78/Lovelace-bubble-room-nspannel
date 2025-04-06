@@ -79,13 +79,13 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         position: absolute;
         cursor: pointer;
         border-radius: 100% !important;
-        width: 420px !important;
-        height: 420px !important;
+        width: 440px !important;
+        height: 440px !important;
         display: flex;
         justify-content: center;
         align-items: center;
         top: -100px;
-        left: -70px;
+        left: -90px;
       }
       .bubble-icon {
         position: absolute;
@@ -112,7 +112,7 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         padding: 10px;
         border-radius: 10px;
         text-align: center;
-        min-height: 112px;
+        min-height: 110px;
         margin: 5px;
         cursor: pointer;
       }
