@@ -339,13 +339,13 @@ class bubbleroomnspannel extends LitElement {
         position: absolute;
         cursor: pointer;
         border-radius: 100% !important;
-        width: 400px !important;
-        height: 400px !important;
+        width: 420px !important;
+        height: 420px !important;
         display: flex;
         justify-content: center;
         align-items: center;
         top: -100px;
-        left: -50px;
+        left: -70px;
       }
       .bubble-icon {
         position: absolute;
@@ -372,7 +372,7 @@ class bubbleroomnspannel extends LitElement {
         padding: 10px;
         border-radius: 10px;
         text-align: center;
-        min-height: 111px;
+        min-height: 112px;
         margin: 5px;
         cursor: pointer;
       }
@@ -411,7 +411,7 @@ class bubbleroomnspannel extends LitElement {
       case 3: return "bottom: 39px; left: 96px;";
       case 4: return "bottom: -1px; left: 85px;";
       case 5: return "bottom: -2px; left: -2px;";
-      case 6: return "top: -320px; left: 5px;";
+      case 6: return "top: -340px; left: 5px;";
       case 7: return "top: -95px; right: 0px;";
       default: return "";
     }
