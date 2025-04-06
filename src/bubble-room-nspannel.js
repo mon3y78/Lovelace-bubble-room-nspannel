@@ -284,8 +284,8 @@ class bubbleroomnspannel extends LitElement {
       *, *::before, *::after { box-sizing: border-box; }
       :host {
         display: block;
-        --card-height: 480px;
-        --card-width: 480px;
+        height: 480px;
+        width: 480px;
         --bubble-bg: gray;
         font-family: sans-serif;
       }
