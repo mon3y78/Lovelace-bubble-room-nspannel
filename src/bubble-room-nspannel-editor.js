@@ -11,8 +11,8 @@ class BubbleRoomEditor extends LitElement {
 
   // Supporto all'editor visivo
   static async getConfigElement() {
-    await import('./bubble-room-editor.js');
-    return document.createElement('bubble-room-editor');
+    await import('./bubble-room-nspannel-editor.js');
+    return document.createElement('bubble-room-nspannel-editor');
   }
 
   static getStubConfig() {
@@ -217,7 +217,7 @@ class BubbleRoomEditor extends LitElement {
     };
     return html`
       <div class="editor-header">
-        <h3>Visual Editor Bubble Room</h3>
+        <h3>Visual Editor bubble room nspannel</h3>
       </div>
 
       <ha-expansion-panel id="roomPanel">
@@ -721,4 +721,4 @@ class BubbleRoomEditor extends LitElement {
   }
 }
 
-customElements.define('bubble-room-editor', BubbleRoomEditor);
+customElements.define('bubble-room-nspannel-editor', BubbleRoomEditor);

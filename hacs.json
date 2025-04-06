@@ -1,8 +1,8 @@
 {
-  "name": "Lovelace Bubble Room",
+  "name": "Lovelace Bubble Room Nspannel",
   "content_in_root": true,
   "render_readme": true,
   "render": "module",
   "domains": ["lovelace"],
-  "filename": "lovelace-bubble-room.js"
+  "filename": "lovelace-bubble-room-nspannel.js"
 }
