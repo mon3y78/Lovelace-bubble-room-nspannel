@@ -84,15 +84,15 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         display: flex;
         justify-content: center;
         align-items: center;
-        top: -110px;
-        left: -100px;
+        top: -130px;
+        left: -130px;
       }
       .bubble-icon {
         position: absolute;
         top: 10%;
         left: 30%;
         width: 50% !important;
-        --mdc-icon-size: 350px !important;
+        --mdc-icon-size: 300px !important;
         opacity: 0.5 !important;
       }
       .bubble-sub-button-container {
