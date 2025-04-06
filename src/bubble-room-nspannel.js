@@ -623,6 +623,13 @@ class bubbleroomnspannel extends LitElement {
     if (entities.camera) { mushroomTemplates.push(entities.camera); }
 
     return html`
+      <ha-card>
+        <div class="card">
+          <div class="grid-container">
+            <!-- tutto il contenuto come prima -->
+          </div>
+        </div>
+      </ha-card>
       <div class="card">
         <div class="grid-container">
           <div class="name-area" style="color: ${nameColor};">
