@@ -62,9 +62,9 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         display: flex;
         align-items: center;
         padding-left: 2px;
-        margin-top: -67px;
+        margin-top: -2px;
         margin-left: 0;
-        font-size: 36px;
+        font-size: 50px;
         font-weight: bold;
         color: inherit;
       }
@@ -79,20 +79,20 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         position: absolute;
         cursor: pointer;
         border-radius: 100% !important;
-        width: 200px !important;
-        height: 200px !important;
+        width: 300px !important;
+        height: 300px !important;
         display: flex;
         justify-content: center;
         align-items: center;
-        top: -39px;
-        left: -40px;
+        top: 0px;
+        left: 0px;
       }
       .bubble-icon {
         position: absolute;
         top: 20%;
         left: 30%;
         width: 50% !important;
-        --mdc-icon-size: 75px !important;
+        --mdc-icon-size: 150px !important;
         opacity: 0.5 !important;
       }
       .bubble-sub-button-container {
@@ -112,7 +112,7 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         padding: 10px;
         border-radius: 10px;
         text-align: center;
-        min-height: 38px;
+        min-height: 50px;
         margin: 3px;
         cursor: pointer;
       }
