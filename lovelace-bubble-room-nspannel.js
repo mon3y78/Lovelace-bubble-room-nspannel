@@ -79,20 +79,20 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         position: absolute;
         cursor: pointer;
         border-radius: 100% !important;
-        width: 460px !important;
-        height: 460px !important;
+        width: 480px !important;
+        height: 480px !important;
         display: flex;
         justify-content: center;
         align-items: center;
-        top: -100px;
+        top: -110px;
         left: -100px;
       }
       .bubble-icon {
         position: absolute;
-        top: 20%;
+        top: 10%;
         left: 30%;
         width: 50% !important;
-        --mdc-icon-size: 150px !important;
+        --mdc-icon-size: 350px !important;
         opacity: 0.5 !important;
       }
       .bubble-sub-button-container {
