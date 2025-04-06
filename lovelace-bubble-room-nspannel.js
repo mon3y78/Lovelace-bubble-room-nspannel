@@ -62,7 +62,7 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         display: flex;
         align-items: center;
         padding-left: 2px;
-        margin-top: -20px;
+        margin-top: -200px;
         margin-left: 0;
         font-size: 60px;
         font-weight: bold;
@@ -112,7 +112,7 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         padding: 10px;
         border-radius: 10px;
         text-align: center;
-        min-height: 110px;
+        min-height: 90px;
         margin: 3px;
         cursor: pointer;
       }
