@@ -84,13 +84,13 @@ class ot extends ${constructor(){super(...arguments),this.renderOptions={host:th
         display: flex;
         justify-content: center;
         align-items: center;
-        top: 0px;
-        left: 0px;
+        top: -130px;
+        left: -150px;
       }
       .bubble-icon {
         position: absolute;
-        top: 0px;
-        left: 0px;
+        top: -50px;
+        left: -50px;
         width: 50% !important;
         --mdc-icon-size: 270px !important;
         opacity: 0.5 !important;
