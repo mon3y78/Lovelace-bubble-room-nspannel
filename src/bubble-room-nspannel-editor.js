@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
-class BubbleRoomEditor extends LitElement {
+class BubbleRoomNSPannelEditor extends LitElement {
   static get properties() {
     return {
       _config: { type: Object },
@@ -53,6 +53,11 @@ class BubbleRoomEditor extends LitElement {
           temperature_sensor: 'sensor.vindstyrka_salotto_temperature',
           humidity_sensor: 'sensor.vindstyrka_salotto_humidity',
           tap_action: { action: 'more-info' }
+        },
+        camera: {
+          entity: 'camera.front_door',
+          icon: '',
+          tap_action: { action: 'more-info' },
         }
       },
       colors: {
@@ -140,7 +145,6 @@ class BubbleRoomEditor extends LitElement {
         text-align: center;
         margin: 1rem 0;
       }
-      /* Stile comune per tutti gli header dei pannelli */
       ha-expansion-panel div[slot="header"] {
         background-color: var(--slider-bar-color);
         color: var(--text-primary-color);
@@ -179,9 +183,7 @@ class BubbleRoomEditor extends LitElement {
 
   _renderSubButtonPanel(key) {
     const entityConfig = this._config.entities?.[key];
-    if (!entityConfig?.entity || entityConfig.entity.trim() === "") {
-      return html``;
-    }
+    if (!entityConfig?.entity || entityConfig.entity.trim() === "") return html``;
   
     let label;
     switch(key) {
@@ -192,7 +194,7 @@ class BubbleRoomEditor extends LitElement {
       default: label = key;
     }
     const panelId = `${key}Panel`;
-  
+    
     return html`
       <ha-expansion-panel id="${panelId}">
         <div slot="header" @click="${() => this._togglePanel(panelId)}">
@@ -206,15 +208,210 @@ class BubbleRoomEditor extends LitElement {
       </ha-expansion-panel>
     `;
   }
-
+  
+  _renderMushroomEntityPanel(key, label) {
+    const panelId = `${key}Panel`;
+    return html`
+      <ha-expansion-panel id="${panelId}">
+        <div slot="header" @click="${() => this._togglePanel(panelId)}">
+          ${label}
+        </div>
+        <div class="section-content">
+          ${this._renderEntityInput(`${label} (ID)`, key)}
+          ${this._renderIconInput(`${label} Icon`, key)}
+        </div>
+      </ha-expansion-panel>
+    `;
+  }
+  
+  _renderEntityInput(labelText, entityKey, field = 'entity') {
+    const value = (this._config.entities &&
+                   this._config.entities[entityKey] &&
+                   this._config.entities[entityKey][field]) || '';
+    return html`
+      <label>${labelText}:</label>
+      <input
+        type="text"
+        .value="${value}"
+        list="entity-list"
+        @input="${this._updateEntity(entityKey, field)}"
+      />
+    `;
+  }
+  
+  _renderIconInput(labelText, entityKey, field = 'icon') {
+    const value = (this._config.entities &&
+                 this._config.entities[entityKey] &&
+                 this._config.entities[entityKey][field]) || '';
+    return html`
+      <label>${labelText}:</label>
+      <input
+        type="text"
+        .value="${value}"
+        list="icon-list"
+        @input="${this._updateEntity(entityKey, field)}"
+      />
+    `;
+  }
+  
+  _renderRoomAction() {
+    const tapAction = this._config.tap_action || { action: 'navigate', navigation_path: '' };
+    const holdAction = this._config.hold_action || { action: 'more-info', navigation_path: '' };
+    return html`
+      <div class="input-group">
+        <label>Tap:</label>
+        <select @change="${this._updateTapActionField('action')}" .value="${tapAction.action}">
+          <option value="toggle">Toggle</option>
+          <option value="more-info">More Info</option>
+          <option value="navigate">Navigate</option>
+          <option value="call-service">Call Service</option>
+          <option value="none">None</option>
+        </select>
+        ${tapAction.action === 'navigate'
+          ? html`
+              <label>Navigation Path:</label>
+              <input
+                type="text"
+                .value="${tapAction.navigation_path || ''}"
+                @input="${this._updateTapActionField('navigation_path')}"
+              />
+            `
+          : ''}
+        ${tapAction.action === 'call-service'
+          ? html`
+              <label>Service:</label>
+              <input
+                type="text"
+                .value="${tapAction.service || ''}"
+                @input="${this._updateTapActionField('service')}"
+              />
+              <label>Service Data (JSON):</label>
+              <textarea
+                .value="${tapAction.service_data ? JSON.stringify(tapAction.service_data) : ''}"
+                @input="${this._updateTapActionField('service_data')}"
+              ></textarea>
+            `
+          : ''}
+      </div>
+      <div class="input-group">
+        <label>Hold:</label>
+        <select @change="${this._updateHoldActionField('action')}" .value="${holdAction.action}">
+          <option value="more-info">More Info</option>
+          <option value="toggle">Toggle</option>
+          <option value="call-service">Call Service</option>
+          <option value="navigate">Navigate</option>
+          <option value="none">None</option>
+        </select>
+        ${holdAction.action === 'navigate'
+          ? html`
+              <label>Navigation Path:</label>
+              <input
+                type="text"
+                .value="${holdAction.navigation_path || ''}"
+                @input="${this._updateHoldActionField('navigation_path')}"
+              />
+            `
+          : ''}
+        ${holdAction.action === 'call-service'
+          ? html`
+              <label>Service:</label>
+              <input
+                type="text"
+                .value="${holdAction.service || ''}"
+                @input="${this._updateHoldActionField('service')}"
+              />
+              <label>Service Data (JSON):</label>
+              <textarea
+                .value="${holdAction.service_data ? JSON.stringify(holdAction.service_data) : ''}"
+                @input="${this._updateHoldActionField('service_data')}"
+              ></textarea>
+            `
+          : ''}
+      </div>
+    `;
+  }
+  
+  _renderSubButtonAction(key) {
+    const tapAction = this._config.entities[key]?.tap_action || { action: 'toggle', navigation_path: '' };
+    const holdAction = this._config.entities[key]?.hold_action || { action: 'more-info', navigation_path: '' };
+    return html`
+      <div class="input-group">
+        <label>Tap:</label>
+        <select @change="${this._updateEntityTapAction(key, 'action')}" .value="${tapAction.action}">
+          <option value="toggle">Toggle</option>
+          <option value="more-info">More Info</option>
+          <option value="navigate">Navigate</option>
+          <option value="call-service">Call Service</option>
+          <option value="none">None</option>
+        </select>
+        ${tapAction.action === 'navigate'
+          ? html`
+              <label>Navigation Path:</label>
+              <input
+                type="text"
+                .value="${tapAction.navigation_path || ''}"
+                @input="${this._updateEntityTapAction(key, 'navigation_path')}"
+              />
+            `
+          : ''}
+        ${tapAction.action === 'call-service'
+          ? html`
+              <label>Service:</label>
+              <input
+                type="text"
+                .value="${tapAction.service || ''}"
+                @input="${this._updateEntityTapAction(key, 'service')}"
+              />
+              <label>Service Data (JSON):</label>
+              <textarea
+                .value="${tapAction.service_data ? JSON.stringify(tapAction.service_data) : ''}"
+                @input="${this._updateEntityTapAction(key, 'service_data')}"
+              ></textarea>
+            `
+          : ''}
+      </div>
+      <div class="input-group">
+        <label>Hold:</label>
+        <select @change="${this._updateEntityHoldAction(key, 'action')}" .value="${holdAction.action}">
+          <option value="more-info">More Info</option>
+          <option value="toggle">Toggle</option>
+          <option value="navigate">Navigate</option>
+          <option value="call-service">Call Service</option>
+          <option value="none">None</option>
+        </select>
+        ${holdAction.action === 'navigate'
+          ? html`
+              <label>Navigation Path:</label>
+              <input
+                type="text"
+                .value="${holdAction.navigation_path || ''}"
+                @input="${this._updateEntityHoldAction(key, 'navigation_path')}"
+              />
+            `
+          : ''}
+        ${holdAction.action === 'call-service'
+          ? html`
+              <label>Service:</label>
+              <input
+                type="text"
+                .value="${holdAction.service || ''}"
+                @input="${this._updateEntityHoldAction(key, 'service')}"
+              />
+              <label>Service Data (JSON):</label>
+              <textarea
+                .value="${holdAction.service_data ? JSON.stringify(holdAction.service_data) : ''}"
+                @input="${this._updateEntityHoldAction(key, 'service_data')}"
+              ></textarea>
+            `
+          : ''}
+      </div>
+    `;
+  }
+  
   render() {
     if (!this._config) {
       return html`<div>Caricamento configurazione...</div>`;
     }
-    const hasEntity = (key) => {
-      const e = this._config.entities?.[key]?.entity;
-      return e && e.trim() !== "";
-    };
     return html`
       <div class="editor-header">
         <h3>Visual Editor bubble room nspannel</h3>
@@ -287,8 +484,6 @@ class BubbleRoomEditor extends LitElement {
           </div>
         </div>
       </ha-expansion-panel>
-
-
 
       <ha-expansion-panel id="climatePanel">
         <div slot="header" @click="${() => this._togglePanel('climatePanel')}">
@@ -374,226 +569,6 @@ class BubbleRoomEditor extends LitElement {
         For advanced configurations, modify the YAML directly.
       </p>
     `;
-  }
-
-  _renderMushroomEntityPanel(key, label) {
-    const panelId = `${key}Panel`;
-    return html`
-      <ha-expansion-panel id="${panelId}">
-        <div slot="header" @click="${() => this._togglePanel(panelId)}">
-          ${label}
-        </div>
-        <div class="section-content">
-          ${this._renderEntityInput(`${label} (ID)`, key)}
-          ${this._renderIconInput(`${label} Icon`, key)}
-        </div>
-      </ha-expansion-panel>
-    `;
-  }
-
-  _renderEntityInput(labelText, entityKey, field = 'entity') {
-    const value = (this._config.entities &&
-                   this._config.entities[entityKey] &&
-                   this._config.entities[entityKey][field]) || '';
-    return html`
-      <label>${labelText}:</label>
-      <input
-        type="text"
-        .value="${value}"
-        list="entity-list"
-        @input="${this._updateEntity(entityKey, field)}"
-      />
-    `;
-  }
-
-  _renderIconInput(labelText, entityKey, field = 'icon') {
-    let value = (this._config.entities &&
-                 this._config.entities[entityKey] &&
-                 this._config.entities[entityKey][field]) || '';
-    if (!value && this.hass && this._config.entities && this._config.entities[entityKey]?.entity) {
-      const entityId = this._config.entities[entityKey].entity;
-      value = this.hass.states[entityId]?.attributes?.icon || '';
-    }
-    return html`
-      <label>${labelText}:</label>
-      <input
-        type="text"
-        .value="${value}"
-        list="icon-list"
-        @input="${this._updateEntity(entityKey, field)}"
-      />
-    `;
-  }
-
-  _renderRoomAction() {
-    const tapAction = this._config.tap_action || { action: 'navigate', navigation_path: '' };
-    const holdAction = this._config.hold_action || { action: 'more-info', navigation_path: '' };
-    return html`
-      <div class="input-group">
-        <label>Tap:</label>
-        <select @change="${this._updateTapActionField('action')}" .value="${tapAction.action}">
-          <option value="toggle">Toggle</option>
-          <option value="more-info">More Info</option>
-          <option value="navigate">Navigate</option>
-          <option value="call-service">Call Service</option>
-          <option value="none">None</option>
-        </select>
-        ${tapAction.action === 'navigate'
-          ? html`
-              <label>Navigation Path:</label>
-              <input
-                type="text"
-                .value="${tapAction.navigation_path || ''}"
-                @input="${this._updateTapActionField('navigation_path')}"
-              />
-            `
-          : ''}
-        ${tapAction.action === 'call-service'
-          ? html`
-              <label>Service:</label>
-              <input
-                type="text"
-                .value="${tapAction.service || ''}"
-                @input="${this._updateTapActionField('service')}"
-              />
-              <label>Service Data (JSON):</label>
-              <textarea
-                .value="${tapAction.service_data ? JSON.stringify(tapAction.service_data) : ''}"
-                @input="${this._updateTapActionField('service_data')}"
-              ></textarea>
-            `
-          : ''}
-      </div>
-      <div class="input-group">
-        <label>Hold:</label>
-        <select @change="${this._updateHoldActionField('action')}" .value="${holdAction.action}">
-          <option value="more-info">More Info</option>
-          <option value="toggle">Toggle</option>
-          <option value="call-service">Call Service</option>
-          <option value="navigate">Navigate</option>
-          <option value="none">None</option>
-        </select>
-        ${holdAction.action === 'navigate'
-          ? html`
-              <label>Navigation Path:</label>
-              <input
-                type="text"
-                .value="${holdAction.navigation_path || ''}"
-                @input="${this._updateHoldActionField('navigation_path')}"
-              />
-            `
-          : ''}
-        ${holdAction.action === 'call-service'
-          ? html`
-              <label>Service:</label>
-              <input
-                type="text"
-                .value="${holdAction.service || ''}"
-                @input="${this._updateHoldActionField('service')}"
-              />
-              <label>Service Data (JSON):</label>
-              <textarea
-                .value="${holdAction.service_data ? JSON.stringify(holdAction.service_data) : ''}"
-                @input="${this._updateHoldActionField('service_data')}"
-              ></textarea>
-            `
-          : ''}
-      </div>
-    `;
-  }
-
-  _renderSubButtonAction(key) {
-    const tapAction = this._config.entities[key]?.tap_action || { action: 'toggle', navigation_path: '' };
-    const holdAction = this._config.entities[key]?.hold_action || { action: 'more-info', navigation_path: '' };
-    return html`
-      <div class="input-group">
-        <label>Tap:</label>
-        <select @change="${this._updateEntityTapAction(key, 'action')}" .value="${tapAction.action}">
-          <option value="toggle">Toggle</option>
-          <option value="more-info">More Info</option>
-          <option value="navigate">Navigate</option>
-          <option value="call-service">Call Service</option>
-          <option value="none">None</option>
-        </select>
-        ${tapAction.action === 'navigate'
-          ? html`
-              <label>Navigation Path:</label>
-              <input
-                type="text"
-                .value="${tapAction.navigation_path || ''}"
-                @input="${this._updateEntityTapAction(key, 'navigation_path')}"
-              />
-            `
-          : ''}
-        ${tapAction.action === 'call-service'
-          ? html`
-              <label>Service:</label>
-              <input
-                type="text"
-                .value="${tapAction.service || ''}"
-                @input="${this._updateEntityTapAction(key, 'service')}"
-              />
-              <label>Service Data (JSON):</label>
-              <textarea
-                .value="${tapAction.service_data ? JSON.stringify(tapAction.service_data) : ''}"
-                @input="${this._updateEntityTapAction(key, 'service_data')}"
-              ></textarea>
-            `
-          : ''}
-      </div>
-      <div class="input-group">
-        <label>Hold:</label>
-        <select @change="${this._updateEntityHoldAction(key, 'action')}" .value="${holdAction.action}">
-          <option value="more-info">More Info</option>
-          <option value="toggle">Toggle</option>
-          <option value="navigate">Navigate</option>
-          <option value="call-service">Call Service</option>
-          <option value="none">None</option>
-        </select>
-        ${holdAction.action === 'navigate'
-          ? html`
-              <label>Navigation Path:</label>
-              <input
-                type="text"
-                .value="${holdAction.navigation_path || ''}"
-                @input="${this._updateEntityHoldAction(key, 'navigation_path')}"
-              />
-            `
-          : ''}
-        ${holdAction.action === 'call-service'
-          ? html`
-              <label>Service:</label>
-              <input
-                type="text"
-                .value="${holdAction.service || ''}"
-                @input="${this._updateEntityHoldAction(key, 'service')}"
-              />
-              <label>Service Data (JSON):</label>
-              <textarea
-                .value="${holdAction.service_data ? JSON.stringify(holdAction.service_data) : ''}"
-                @input="${this._updateEntityHoldAction(key, 'service_data')}"
-              ></textarea>
-            `
-          : ''}
-      </div>
-    `;
-  }
-
-  set hass(hass) {
-    this._hass = hass;
-    this.requestUpdate();
-  }
-
-  get hass() {
-    return this._hass;
-  }
-
-  _fireConfigChanged() {
-    this.dispatchEvent(new CustomEvent('config-changed', {
-      detail: { config: this._config },
-      bubbles: true,
-      composed: true,
-    }));
   }
 
   _updateName(ev) {
@@ -719,6 +694,14 @@ class BubbleRoomEditor extends LitElement {
       this._fireConfigChanged();
     };
   }
+
+  _fireConfigChanged() {
+    this.dispatchEvent(new CustomEvent('config-changed', {
+      detail: { config: this._config },
+      bubbles: true,
+      composed: true,
+    }));
+  }
 }
 
-customElements.define('bubble-room-nspannel-editor', BubbleRoomEditor);
+customElements.define('bubble-room-nspannel-editor', BubbleRoomNSPannelEditor);

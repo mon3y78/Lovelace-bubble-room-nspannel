@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from 'lit';
 import fitty from 'fitty';
 
-class bubbleroomnspannel extends LitElement {
+class BubbleRoomNSPannel extends LitElement {
   static get properties() {
     return {
       config: { type: Object },
@@ -10,14 +10,12 @@ class bubbleroomnspannel extends LitElement {
   }
 
   firstUpdated() {
-    // Applica fitty al nome
     // Applica fitty agli elementi mushroom che contengono il testo
     const mushroomEls = this.shadowRoot.querySelectorAll('.mushroom-primary');
     if (mushroomEls.length) {
       fitty(mushroomEls, { maxSize: 20, multiLine: false });
     }
   }
-
 
   // Supporto all'editor visivo
   static async getConfigElement() {
@@ -64,7 +62,6 @@ class bubbleroomnspannel extends LitElement {
           entity: 'camera.front_door',
           icon: '',  // Lascia vuoto per usare il fallback
           tap_action: { action: 'more-info' },
-          // Puoi aggiungere altri parametri specifici, ad esempio un URL per l’anteprima
         },
         entities1: { entity: 'sensor.some_sensor1', icon: '' },
         entities2: { entity: 'sensor.some_sensor2', icon: '' },
@@ -90,8 +87,6 @@ class bubbleroomnspannel extends LitElement {
   }
 
   // Funzione helper per ottenere l'icona di fallback.
-  // Controlla prima se esiste una personalizzazione in hass.customize, altrimenti legge l'attributo icon dallo stato.
-  
   _getFallbackIcon(entityId, explicitIcon = '') {
     if (explicitIcon && explicitIcon.trim() !== '') {
       return explicitIcon;
@@ -169,7 +164,7 @@ class bubbleroomnspannel extends LitElement {
         return state === 'open' ? 'mdi:blinds-open' : 'mdi:blinds-closed';
       case 'occupancy':
         return state === 'on' ? 'mdi:account-voice' : 'mdi:account-voice-off';
-        case 'lock':
+      case 'lock':
         return state === 'locked' ? 'mdi:lock' : 'mdi:lock-open';
       case 'door':
         return state === 'open' ? 'mdi:door-open' : 'mdi:door-closed';
@@ -180,9 +175,22 @@ class bubbleroomnspannel extends LitElement {
     }
   }
   
-   
+  // Funzione helper per costruire il testo per temperatura e umidità
+  _buildTemperatureText(item) {
+    const hass = this.hass;
+    const temp = item.temperature_sensor ? hass.states[item.temperature_sensor]?.state : null;
+    const hum = item.humidity_sensor ? hass.states[item.humidity_sensor]?.state : null;
+    let text = "";
+    if (temp !== null && temp !== undefined && temp !== '') {
+      text += `🌡️${temp}°C`;
+    }
+    if (hum !== null && hum !== undefined && hum !== '') {
+      if (text) text += " ";
+      text += `💦${hum}%`;
+    }
+    return text.trim();
+  }
   
-
   setConfig(config) {
     config = JSON.parse(JSON.stringify(config));
     if (!config || typeof config !== 'object' || Array.isArray(config)) {
@@ -278,7 +286,7 @@ class bubbleroomnspannel extends LitElement {
   getConfig() {
     return JSON.parse(JSON.stringify(this.config));
   }
-
+  
   static get styles() {
     return css`
       *, *::before, *::after { box-sizing: border-box; }
@@ -376,7 +384,6 @@ class bubbleroomnspannel extends LitElement {
         margin: 5px;
         cursor: pointer;
       }
-
       .mushroom-container {
         position: absolute;
         bottom: 0;
@@ -598,9 +605,10 @@ class bubbleroomnspannel extends LitElement {
     const presenceState = hass.states[entities.presence.entity]?.state || 'off';
     const bubbleBg = presenceState === 'on' ? colors.backgroundActive : colors.backgroundInactive;
 
-    // Main icon fallback
+    // Calcola l'icona principale: se non è definita una stringa valida, usa il fallback
     const mainEntityId = this.config.entity;
-    const mainIcon = this.config.icon ? this.config.icon : fallbackMainIcon;
+    const fallbackMainIcon = this._getFallbackIcon(mainEntityId);
+    const mainIcon = this.config.icon && this.config.icon.trim() !== "" ? this.config.icon : fallbackMainIcon;
     const bubbleIconColor = this.config.main_icon_color || (presenceState === 'on' ? colors.active : colors.inactive);
     const nameColor = bubbleIconColor;
 
@@ -631,10 +639,10 @@ class bubbleroomnspannel extends LitElement {
             </div>
             <div class="icon-area">
               <div class="bubble-icon-container"
-                  style="background-color: ${bubbleBg};"
-                  @pointerdown="${(e) => this._startHold(e, this.config)}"
-                  @pointerup="${(e) => this._endHold(e, this.config, () => this._handleMainIconTap())}"
-                  @pointerleave="${(e) => this._cancelHold(e)}">
+                   style="background-color: ${bubbleBg};"
+                   @pointerdown="${(e) => this._startHold(e, this.config)}"
+                   @pointerup="${(e) => this._endHold(e, this.config, () => this._handleMainIconTap())}"
+                   @pointerleave="${(e) => this._cancelHold(e)}">
                 ${mainIcon ? html`
                   <ha-icon
                     key="${mainEntityId}-${mainIcon}"
@@ -647,16 +655,19 @@ class bubbleroomnspannel extends LitElement {
               <div class="mushroom-container">
                 ${mushroomTemplates.map((item, index) => {
                   if (!item) return html``;
-                  if (item.temperature_sensor && item.humidity_sensor) {
-                    const tempState = hass.states[item.temperature_sensor]?.state || 'N/A';
-                    const humState = hass.states[item.humidity_sensor]?.state || 'N/A';
+                  // Gestione dei sensori per temperatura/umidità:
+                  if (item.temperature_sensor || item.humidity_sensor) {
+                    const temperatureText = this._buildTemperatureText(item);
+                    if (!temperatureText) return html``;
                     return html`
                       <div class="mushroom-item"
-                          style="${item.style ? item.style : this._defaultMushroomStyle(index)}"
-                          @pointerdown="${(e) => this._startHold(e, item)}"
-                          @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
-                          @pointerleave="${(e) => this._cancelHold(e)}">
-                        <div class="mushroom-primary fit-text">🌡️${tempState}°C 💦${humState}%</div>
+                           style="${item.style ? item.style : this._defaultMushroomStyle(index)}"
+                           @pointerdown="${(e) => this._startHold(e, item)}"
+                           @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
+                           @pointerleave="${(e) => this._cancelHold(e)}">
+                        <div class="mushroom-primary fit-text">
+                          ${temperatureText}
+                        </div>
                       </div>
                     `;
                   } else {
@@ -665,14 +676,14 @@ class bubbleroomnspannel extends LitElement {
                       ? (item.icon_color && item.icon_color.on ? item.icon_color.on : 'orange')
                       : (item.icon_color && item.icon_color.off ? item.icon_color.off : '#80808055');
                     const fallbackIcon = this._getFallbackIcon(item.entity);
-                    const iconToUse = (item.icon && item.icon.trim() !== "") ? item.icon : fallbackIcon;
+                    const iconToUse = item.icon && item.icon.trim() !== "" ? item.icon : fallbackIcon;
                     const style = item.style ? item.style : this._defaultMushroomStyle(index);
                     return html`
                       <div class="mushroom-item"
-                          style="${style}"
-                          @pointerdown="${(e) => this._startHold(e, item)}"
-                          @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
-                          @pointerleave="${(e) => this._cancelHold(e)}">
+                           style="${style}"
+                           @pointerdown="${(e) => this._startHold(e, item)}"
+                           @pointerup="${(e) => this._endHold(e, item, () => this._handleMushroomTap(item))}"
+                           @pointerleave="${(e) => this._cancelHold(e)}">
                         ${iconToUse ? html`
                           <ha-icon icon="${iconToUse}" style="color: ${iconColor};"></ha-icon>
                         ` : nothing}
@@ -684,12 +695,11 @@ class bubbleroomnspannel extends LitElement {
             </div>
             <div class="bubble-sub-button-container">
               ${subButtons.map(btn => {
-                if (!btn) return html``;
+                if (!btn || !btn.entity || btn.entity.trim() === "") return html``;
                 const state = hass.states[btn.entity]?.state || 'off';
                 const btnColor = state === 'on' ? colors.active : colors.inactive;
                 const fallbackIcon = this._getFallbackIcon(btn.entity);
-                const iconToUse = btn.icon ? btn.icon : fallbackIcon;
-                // Calcola l'iconColor come nelle mushroom template:
+                const iconToUse = btn.icon && btn.icon.trim() !== "" ? btn.icon : fallbackIcon;
                 const iconColor = state === 'on'
                   ? (btn.icon_color && btn.icon_color.on ? btn.icon_color.on : 'orange')
                   : (btn.icon_color && btn.icon_color.off ? btn.icon_color.off : '#80808055');
@@ -722,13 +732,12 @@ class bubbleroomnspannel extends LitElement {
   }
 }
 
-customElements.define('bubble-room-nspannel', bubbleroomnspannel);
-// AGGIUNGI QUESTO BLOCCO ALLA FINE DEL FILE
+customElements.define('bubble-room-nspannel', BubbleRoomNSPannel);
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: 'bubble-room-nspannel',     // Deve corrispondere a `type: custom:bubble-room-nspannel`
-  name: 'bubble room nspannel nspannel',            // Nome che vuoi compaia nel picker
-  description: 'bubble room nspannel nspannel',  
-  preview: true,            // Abilita l'anteprima (se supportata)
+  type: 'bubble-room-nspannel',
+  name: 'bubble room nspannel nspannel',
+  description: 'bubble room nspannel nspannel',
+  preview: true,
   documentationURL: 'https://github.com/mon3y78/Lovelace-bubble-room-nspannel'
 });
