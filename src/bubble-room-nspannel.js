@@ -357,10 +357,10 @@ class BubbleRoomNSPannel extends LitElement {
       }
       .bubble-icon {
         position: absolute;
-        top: 65px;
-        left: 120px;
+        top: 80px;
+        left: 155px;
         width: 50% !important;
-        --mdc-icon-size: 270px !important;
+        --mdc-icon-size: 220px !important;
         opacity: 0.5 !important;
       }
       .bubble-sub-button-container {
@@ -399,9 +399,9 @@ class BubbleRoomNSPannel extends LitElement {
         cursor: pointer;
       }
       .mushroom-item ha-icon {
-        --mdc-icon-size: 50px;
-        width: 50px;
-        height: 50px;
+        --mdc-icon-size: 80px;
+        width: 80px;
+        height: 80px;
       }
       .fit-text {
         white-space: nowrap;
@@ -412,13 +412,13 @@ class BubbleRoomNSPannel extends LitElement {
 
   _defaultMushroomStyle(index) {
     switch (index) {
-      case 0: return "top: -77px; left: 0px;";
-      case 1: return "top: -85px; left: 38px;";
-      case 2: return "top: -64px; left: 77px;";
-      case 3: return "bottom: 39px; left: 96px;";
-      case 4: return "bottom: -1px; left: 85px;";
-      case 5: return "bottom: -2px; left: -2px;";
-      case 6: return "top: -340px; left: 5px;";
+      case 0: return "top: -230px; left: 0px;";
+      case 1: return "top: -235px; left: 110px;";
+      case 2: return "bottom: 210px; left: 200px;";
+      case 3: return "bottom: 100px; left: 230px;";
+      case 4: return "bottom: 5px; left: 220px;";
+      case 5: return "bottom: 0px; left: 0px;";
+      case 6: return "bottom: 280px; left: 280px;";
       case 7: return "top: -95px; right: 0px;";
       default: return "";
     }
