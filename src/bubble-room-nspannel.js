@@ -358,7 +358,7 @@ class BubbleRoomNSPannel extends LitElement {
       .bubble-icon {
         position: absolute;
         top: 55px;
-        left: 70px;
+        left: 90px;
         width: 50% !important;
         --mdc-icon-size: 270px !important;
         opacity: 0.5 !important;
