@@ -352,8 +352,8 @@ class BubbleRoomNSPannel extends LitElement {
         display: flex;
         justify-content: center;
         align-items: center;
-        top: -130px;
-        left: -150px;
+        top: 0px;
+        left: 0px;
       }
       .bubble-icon {
         position: absolute;
