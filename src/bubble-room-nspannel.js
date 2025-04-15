@@ -407,6 +407,11 @@ class BubbleRoomNSPannel extends LitElement {
         white-space: nowrap;
         overflow: hidden;
       }  
+      .mushroom-primary {
+        font-size: 18px; /* o la dimensione che preferisci */
+        line-height: 1.2;
+        #color: #888;
+      }
     `;
   }
 
@@ -418,8 +423,8 @@ class BubbleRoomNSPannel extends LitElement {
       case 3: return "bottom: 100px; left: 230px;";
       case 4: return "bottom: 5px; left: 220px;";
       case 5: return "bottom: 0px; left: 0px;";
-      case 6: return "top: -340px; left: 0px;";
-      case 7: return "top: -280px; left: 280px";
+      case 6: return "top: -340px; left: 5px;";
+      case 7: return "top: -260px; left: 280px";
       default: return "";
     }
   }
