@@ -418,8 +418,8 @@ class BubbleRoomNSPannel extends LitElement {
       case 3: return "bottom: 100px; left: 230px;";
       case 4: return "bottom: 5px; left: 220px;";
       case 5: return "bottom: 0px; left: 0px;";
-      case 6: return "top: -320px; left: 0px;";
-      case 7: return "top: -280px; left: -280px";
+      case 6: return "top: -340px; left: 0px;";
+      case 7: return "top: -280px; left: 280px";
       default: return "";
     }
   }
